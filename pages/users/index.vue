@@ -11,14 +11,19 @@
 
 <script>
 	export default {
-		async asyncData({$axios}) {
-			let users = await $axios.$get('https://jsonplaceholder.typicode.com/users')
-			return {users}
+		async fetch({store}) {
+			if(store.getters['users/users'].length === 0) {
+				await store.dispatch('users/fetch')
+			}
 		},
-		name: "index",
 		data() {
 			return {
 				pageTitle: 'User Page'
+			}
+		},
+		computed: {
+			users() {
+				return this.$store.getters['users/users']
 			}
 		},
 		methods: {
